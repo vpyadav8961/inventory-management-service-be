@@ -22,7 +22,10 @@
   },
   "homepage": "https://github.com/vpyadav8961/inventory-management-service-be#readme",
   "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "socket.io": "^4.8.1"
   }
 }
