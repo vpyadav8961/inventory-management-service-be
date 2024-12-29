@@ -6,6 +6,8 @@ const cors = require('cors');
 config();
 const app = express();
 const httpServer = createServer(app);
+
+const database = require('./config/database');
 const io = new Server(httpServer, {
     cors: {
       origin: process.env.FRONTEND_URL || 'http://localhost:5175',
@@ -26,5 +28,4 @@ app.get("/test", (req, res, next) => {
 const PORT = process.env.PORT || 5175;
 httpServer.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`);
-    
 })
