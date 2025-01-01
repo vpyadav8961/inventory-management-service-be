@@ -1,5 +1,6 @@
 const {DataTypes} = require('sequelize');
 const sequelize = require('../config/database');
+const { password } = require('pg/lib/defaults');
 
 const User = sequelize.define('User', {
   id: {
@@ -14,6 +15,10 @@ const User = sequelize.define('User', {
     validate: {
       isEmail: true
     }
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
   role: {
     type: DataTypes.STRING,

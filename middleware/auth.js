@@ -1,6 +1,8 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const { Sequelize, DataTypes, Op } = require('sequelize');
+const User = require('../models/User');
 
 const router = express.Router();
 
@@ -9,20 +11,43 @@ const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET;
 // Registration function
 router.post('/register', async (req, res) => {
-    const { username, password } = req.body;
+    const { email, password, role } = req.body;
   
-    if (!username || !password) {
-      return res.status(400).send('Username and password are required.');
+    // Input validation (simplified for demonstration)
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password are required' });
     }
   
-    const userExists = users.find((user) => user.username === username);
-    if (userExists) {
-      return res.status(400).send('User already exists.');
-    }
+    try {
+      // Check if email already exists
+      const existingUser = await User.findOne({ where: { email } });
   
-    const hashedPassword = await bcrypt.hash(password, 10);
-    users.push({ username, password: hashedPassword });
-    res.status(201).send('User registered successfully.');
+      if (existingUser) {
+        return res.status(409).json({ error: 'Email already in use' });
+      }
+  
+      // Password validation (example: at least 6 characters)
+      if (password.length < 6) {
+        return res.status(400).json({ error: 'Password must be at least 6 characters long' });
+      }
+      const hashedPassword = await bcrypt.hash(password, 10);
+  
+      // Create the user
+      const newUser = await User.create({ email, hashedPassword, role });
+  
+      res.status(201).json({
+        message: 'User registered successfully',
+        user: {
+          id: newUser.id,
+          name: newUser.name,
+          email: newUser.email,
+          role: newUser.role
+        },
+      });
+    } catch (error) {
+      console.error('Error registering user:', error);
+      res.status(500).json({ error: 'Failed to register user' });
+    }
   });
   
   // Login function
