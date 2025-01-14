@@ -8,6 +8,7 @@ const app = express();
 const httpServer = createServer(app);
 const database = require('./config/database');
 
+
 const io = new Server(httpServer, {
     cors: {
       origin: process.env.FRONTEND_URL || 'http://localhost:5175',
@@ -18,11 +19,11 @@ const io = new Server(httpServer, {
 // Middleware
 app.use(cors());
 app.use(express.json());
+const auth = require('./routes/auth');
 
-app.get("/test", (req, res, next) => {
-    console.log("This is the test url.");
-    res.status(200).json({status:"success", message: "Test running successfully"});
-})
+//Routes
+app.use("/api/user", auth);
+
 
 
 const PORT = process.env.PORT || 5175;
