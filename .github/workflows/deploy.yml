@@ -21,7 +21,8 @@ jobs:
         service_account_key: ${{ secrets.GCP_SA_KEY }}
     
     - name: Decode and save service account key
-      run: echo "${{ secrets.GCP_SA_KEY }}" > ${{ runner.temp }}/gcp_sa_key.json"
+      run: echo "${{ secrets.GCP_SA_KEY }}" > ${{ runner.temp }}/gcp_sa_key.json
+
     - name: Authenticate with service account
       run: gcloud auth activate-service-account --key-file=${{ runner.temp }}/gcp_sa_key.json
 
