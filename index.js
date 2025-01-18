@@ -23,6 +23,9 @@ const auth = require('./routes/auth');
 
 //Routes
 app.use("/api/user", auth);
+app.get("/test", (req, res) => {
+    res.send("Welcome to the test route: Inventry Management System");
+})
 
 
 
