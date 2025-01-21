@@ -42,7 +42,7 @@ A robust Node.js-based inventory management system with real-time stock tracking
 
 - Node.js (v14 or higher)
 - PostgreSQL
-- Supabase account
+- GCP(Cloud Run)
 
 ## Environment Variables
 
@@ -51,8 +51,6 @@ Create a `.env` file in the root directory:
 ```env
 DATABASE_URL=postgres://postgres:postgres@localhost:5432/inventory_management
 NODE_ENV=development
-SUPABASE_URL=your_supabase_url
-SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
 ## Installation
@@ -81,9 +79,9 @@ npm run dev
 ## API Endpoints
 
 ### Authentication
-- `POST /api/auth/signup` - Create new user
-- `POST /api/auth/login` - User login
-- `GET /api/auth/me` - Get current user
+- `POST /api/user/signup` - Create new user
+- `POST api/user/login` - User login
+- `GET /api/user/me` - Get current user
 
 ### Products
 - `GET /api/products` - List all products
