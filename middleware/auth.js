@@ -1,6 +1,6 @@
 const { body, validationResult } = require('express-validator');
 const User = require('../models/User');
-
+const jwt = require('jsonwebtoken');
 const signupValidationRules = () => [
   body('username')
     .notEmpty().withMessage('Username is required')
@@ -26,6 +26,15 @@ const signupValidationRules = () => [
     .isIn(['staff', 'admin']).withMessage('Invalid role')
 ];
 
+const loginValidateRules = () => [
+  body('email')
+    .isEmail().withMessage('Enter a valid email address'),
+  body('password')
+    .isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+  body('role')
+    .isIn(['staff', 'admin']).withMessage('Invalid role')
+]
+
 const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -34,7 +43,25 @@ const validate = (req, res, next) => {
   next();
 };
 
+
+const verifyToken = (req, res, next) => {
+
+  const token = req.headers['authorization'];
+  if (!token) {
+    return res.status(403).json({ error: 'A token is  required for authentication' });  
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    return res.status(401).json({ error: 'Invalid token' });
+  }
+}
+
 module.exports = {
   signupValidationRules,
-  validate
+  loginValidateRules,
+  validate,
+  verifyToken
 };
