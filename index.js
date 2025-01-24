@@ -20,9 +20,11 @@ const io = new Server(httpServer, {
 app.use(cors());
 app.use(express.json());
 const auth = require('./routes/auth');
+const product = require('./routes/product');
 
 //Routes
 app.use("/api/user", auth);
+app.use("/api/product", product);
 app.get("/test", (req, res) => {
     res.send("Welcome to the test route: Inventry Management System");
 })

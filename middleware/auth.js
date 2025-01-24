@@ -43,6 +43,19 @@ const validate = (req, res, next) => {
   next();
 };
 
+const productValidationRules = () => [
+  body('name')
+    .notEmpty().withMessage('Name is required'),
+  body('sku')
+    .notEmpty().withMessage('SKU is required'),
+  body('price')
+    .isNumeric().withMessage('Price must be a number'),
+  body('quantity')
+    .isNumeric().withMessage('Quantity must be a number'),
+  body('category')
+    .notEmpty().withMessage('Category is required')
+];
+
 
 const verifyToken = (req, res, next) => {
 
@@ -63,5 +76,6 @@ module.exports = {
   signupValidationRules,
   loginValidateRules,
   validate,
+  productValidationRules,
   verifyToken
 };
