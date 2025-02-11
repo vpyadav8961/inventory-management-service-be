@@ -44,15 +44,16 @@ const validate = (req, res, next) => {
 };
 
 const productValidationRules = () => [
-  body('name')
+  body('products').isArray().withMessage('Products must be an array'),
+  body('products.*.name')
     .notEmpty().withMessage('Name is required'),
-  body('sku')
+  body('products.*.sku')
     .notEmpty().withMessage('SKU is required'),
-  body('price')
+  body('products.*.price')
     .isNumeric().withMessage('Price must be a number'),
-  body('quantity')
+  body('products.*.quantity')
     .isNumeric().withMessage('Quantity must be a number'),
-  body('category')
+  body('products.*.category')
     .notEmpty().withMessage('Category is required')
 ];
 
@@ -72,10 +73,18 @@ const verifyToken = (req, res, next) => {
   }
 }
 
+const verifyAdmin = (req, res, next) => {
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ error: 'Unauthorized' });
+  }
+  next();
+}
+
 module.exports = {
   signupValidationRules,
   loginValidateRules,
   validate,
   productValidationRules,
-  verifyToken
+  verifyToken,
+  verifyAdmin
 };

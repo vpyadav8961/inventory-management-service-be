@@ -3,22 +3,12 @@ const { Op } = require('sequelize');
 
 class ProductController {
     async createProduct(req, res) {
-        const { name, sku, description, price, quantity, category, productImageLink, productLink} = req.body;
+        const products = req.body.products;
         try {
-            const newProduct = await Product.create({ name, sku, description, price, quantity, category, productImageLink, productLink });
+            const newProducts = await Product.bulkCreate(products);
             res.status(201).json({
                 message: 'Product created successfully',
-                product: {
-                    id: newProduct.id,
-                    name: newProduct.name,
-                    sku: newProduct.sku,
-                    description: newProduct.description,
-                    price: newProduct.price,
-                    quantity: newProduct.quantity,
-                    category: newProduct.category,
-                    productImageLink: newProduct.productImageLink,
-                    productLink: newProduct.productLink
-                }
+                product: newProducts
             });
         } catch (error) {
             console.error('Error creating product:', error);
